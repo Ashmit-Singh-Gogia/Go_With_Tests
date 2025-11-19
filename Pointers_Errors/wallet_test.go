@@ -12,8 +12,9 @@ func TestWallet(t *testing.T) {
 	})
 	t.Run("Withdraw", func(t *testing.T) {
 		wallet := Wallet{balance: 200}
-		wallet.Withdraw(Bitcoin(100))
+		err := wallet.Withdraw(Bitcoin(100))
 		checkTest(t, Bitcoin(100), wallet)
+		checkNoError(t, err)
 	})
 
 	t.Run("withdraw insufficient funcs", func(t *testing.T) {
@@ -40,5 +41,11 @@ func checkError(t testing.TB, err error, want string) {
 
 	if err.Error() != want { // .Error() method converts err to string for comparing
 		t.Errorf("got %v want %v", err, want)
+	}
+}
+func checkNoError(t testing.TB, err error) {
+	t.Helper()
+	if err != nil {
+		t.Fatal("got an error but should not have")
 	}
 }
